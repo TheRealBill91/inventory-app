@@ -15,14 +15,14 @@ WatchInstanceSchema.virtual("url").get(function () {
 });
 
 // Virtual for watchinstance formatted date
-WatchInstanceSchema.virtual("due_back_formatted").get(function () {
+WatchInstanceSchema.virtual("purchase_date_formatted").get(function () {
   return DateTime.fromJSDate(this.purchase_date, {
     zone: "utc",
   }).toLocaleString(DateTime.DATE_MED);
 });
 
 // Virtual for loading in date into input field
-WatchInstanceSchema.virtual("due_back_yyyy_mm_dd").get(function () {
+WatchInstanceSchema.virtual("purchase_date_yyyy_mm_dd").get(function () {
   return DateTime.fromJSDate(this.due_back, { zone: "utc" }).toISODate(); // format 'YYYY-MM-DD'
 });
 
