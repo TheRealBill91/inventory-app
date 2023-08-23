@@ -23,30 +23,31 @@
         <div class="col-sm-2"><%- include('../navbar') %></div>
         <div class="col-sm-10">
           <h1>Name: <%= title %></h1>
-          <p><strong>Summary:</strong> <%= watch.description %></p>
+          <p><strong>Description:</strong> <%= watch.description %></p>
           <p><strong>Price:</strong> $<%= watch.price %></p>
 
           <p>
-            <strong>Styles:</strong>
-            <% watch.style.forEach((watchStyle, index) => { %>
-            <a href="<%= watchStyle.url  %>">
-              <%= watchStyle.name %> <%if (index < watch.style.length - 1 ) { %>
+            <strong>Styles:</strong
+            ><a href="<%= watch.style.url %>"> <%= watch.style.name %> </a>
+          </p>
+          <p>
+            <strong>Brand:</strong>
+            <% watch.brand.forEach((watchBrand, index) => { %>
+            <a href="<%= watchBrand.url  %>">
+              <%= watchBrand.name %> <%if (index < watch.brand.length - 1 ) { %>
               , <% } %>
             </a>
 
             <% }); %>
           </p>
 
-          <p>
-            <strong>Brand:</strong
-            ><a href="<%= watch.brand.url %>"> <%= watch.brand.name %> </a>
-          </p>
           <div style="margin-left: 20px; margin-top: 20px">
             <% if ( watch_instances.length > 0) { %>
             <h4 style="margin-bottom: 0px">Stock:</h4>
             <% for (let watchinstance of watch_instances) { %>
             <hr />
-            <% if (watchinstance.purchase_date_formatted !== undefined) { %>
+            <% if (watchinstance.purchase_date_formatted !== "Invalid DateTime")
+            { %>
             <p>
               <strong> Date purchased: </strong><%=
               watchinstance.purchase_date_formatted %>

@@ -22,23 +22,23 @@
       <div class="row">
         <div class="col-sm-2"><%- include('../navbar') %></div>
         <div class="col-sm-10">
-          <h1>Brand: <%= title %></h1>
+          <h1>SN: <%= title %></h1>
 
-          <div style="margin-left: 20px; margin-top: 20px">
-            <% if ( style_watches.length > 0) { %>
-            <h4 style="margin-bottom: 12px">Stock:</h4>
-            <% for (let style_watch of style_watches) { %>
-            <dl>
-              <dt style="display: flex; gap: 10px; align-items: baseline">
-                <a href="<%= style_watch.url  %>"><%= style_watch.name %></a>
-              </dt>
-              <dd><%= style_watch.description %></dd>
-            </dl>
-            <hr />
-            <% } %> <% } else { %>
-            <p>No watches with this style</p>
-            <% } %>
-          </div>
+          <p>
+            <strong>Name:</strong>
+            <a href="<%= watchinstance_details.watch.url%>">
+              <%= watchinstance_details.watch.name %>
+            </a>
+          </p>
+
+          <p>
+            <% if (watchinstance_details.purchase_date_formatted !== "Invalid DateTime") { %>
+            <strong> Date purchased: </strong><%=
+            watchinstance_details.purchase_date_formatted %>
+          </p>
+          <% } else { %>
+          <p>Available for purchase</p>
+          <% } %>
         </div>
       </div>
     </div>

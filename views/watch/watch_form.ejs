@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="../../stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+      integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-2"><%- include('../navbar') %></div>
+
+        <div class="col-sm-10" style="margin-top: 20px">
+          <h1><%= title %></h1>
+          <form action="" method="post">
+            <div class="form-group">
+              <label for="name"> Name: </label>
+              <input
+                id="name"
+                class="form-control"
+                type="text"
+                name="name"
+                placeholder="Name of watch"
+                value="<%= (typeof watch === 'undefined') ? '' : watch.name  %>"
+                required="true"
+              />
+              <label for="description"> Description: </label>
+              <textarea
+                id="description"
+                class="form-control"
+                type="textarea"
+                placeholder="Description"
+                name="description"
+                required="true"
+              >
+<%= (typeof watch === 'undefined') ? '' : watch.description  %></textarea
+              >
+              <label for="price"> Price: </label>
+              <input
+                id="price"
+                class="form-control"
+                type="number"
+                name="price"
+                placeholder="Name of watch"
+                value="<%= (typeof watch === 'undefined') ? '' : watch.price  %>"
+                required="true"
+              />
+              <label for="style"> Style: </label>
+              <select
+                id="style"
+                class="form-control"
+                type="select"
+                placeholder="Select style"
+                name="style"
+                required="true"
+              >
+                <% styles.sort(function(a, b) {let textA = a.name.toUpperCase();
+                let textB = b.name.toUpperCase(); return (textA < textB) ? -1 :
+                (textA > textB) ? 1 : 0}) %> <% for (let style of styles) { %>
+                <%if (typeof style !== 'undefined' && style) { %> <% if (typeof
+                selected_style !== 'undefined' && selected_style.toString() ===
+                style._id.toString() ) { %>
+                <option value="<%= style._id%>" selected>
+                  <%= style.name %>
+                </option>
+                <% } else { %>
+                <option value="<%= style._id %>"><%= style.name %></option>
+                <% } %> <% } %> <% } %>
+              </select>
+              <div class="form-group">
+                <label>Brand:</label>
+                <div>
+                  <% for (let brand of brands) { %>
+                  <div style="display: inline; padding-right: 10px">
+                    <% if (brand.checked) { %>
+                    <input
+                      type="checkbox"
+                      name="brand"
+                      id="<%=  brand._id %>"
+                      value="<%= brand._id %>"
+                      class="checkbox-input"
+                      checked
+                    />
+                    <% } else { %>
+                    <input
+                      type="checkbox"
+                      name="brand"
+                      id="<%=  brand._id %>"
+                      value="<%= brand._id %>"
+                      class="checkbox-input"
+                    />
+                    <% } %>
+                    <label for="<%= brand._id %>"> <%= brand.name %> </label>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <button
+              style="border: none; border-radius: 8px; padding: 6px"
+              class="btn-primary"
+              type="submit"
+            >
+              Submit
+            </button>
+          </form>
+
+          <% if (typeof errors !== 'undefined') { %> <% if (errors) { %>
+          <ul>
+            <%errors.forEach((error) => { %>
+            <li><%= error.msg %></li>
+            <% }); %>
+          </ul>
+          <% } %> <% } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

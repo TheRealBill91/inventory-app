@@ -21,7 +21,7 @@ router.get("/watch/create", watch_controller.watch_create_get);
 router.post("/watch/create", watch_controller.watch_create_post);
 
 // GET request for updating watch
-router.post("/watch/:id/update", watch_controller.watch_update_get);
+router.get("/watch/:id/update", watch_controller.watch_update_get);
 
 // POST request for updating watch
 router.post("/watch/:id/update", watch_controller.watch_update_post);
@@ -44,19 +44,19 @@ router.get("/brands", brand_controller.all_brands);
 router.get("/brand/create", brand_controller.brand_create_get);
 
 // POST request for creating a brand
-router.get("/brand/create", brand_controller.brand_create_post);
+router.post("/brand/create", brand_controller.brand_create_post);
 
 // GET request for updating watch brand
 router.get("/brand/:id/update", brand_controller.brand_update_get);
 
 // POST request for updating watch brand
-router.get("/brand/:id/update", brand_controller.brand_update_post);
+router.post("/brand/:id/update", brand_controller.brand_update_post);
 
 // GET request for deleting watch brand
 router.get("/brand/:id/delete", brand_controller.brand_delete_get);
 
 // POST request for deleting watch brand
-router.get("/brand/:id/delete", brand_controller.brand_delete_post);
+router.post("/brand/:id/delete", brand_controller.brand_delete_post);
 
 // Load specific brand detail page
 router.get("/brand/:id", brand_controller.brand_details);

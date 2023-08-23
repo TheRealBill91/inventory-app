@@ -7,8 +7,8 @@ const WatchSchema = new Schema({
   description: { type: String, required: true },
   // number_in_stock: { type: Number },
   price: { type: Number, required: true },
-  style: [{ type: Schema.Types.ObjectId, ref: "Style", required: true }],
-  brand: { type: Schema.Types.ObjectId, ref: "Brand", required: true },
+  style: { type: Schema.Types.ObjectId, ref: "Style", required: true },
+  brand: [{ type: Schema.Types.ObjectId, ref: "Brand", required: true }],
 });
 
 // Virtual for watch's URL

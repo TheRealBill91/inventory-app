@@ -24,12 +24,15 @@
         <div class="col-sm-10">
           <h1><%= title %></h1>
           <ul>
-            <% for (let watch of all_watches) { %>
+            <% if (all_watches.length > 0) { %> <% for (let watch of
+            all_watches) { %>
             <li>
               <a href="<%= watch.url %>"> <%= watch.name %> </a>
               ($<%= watch.price %>)
             </li>
 
+            <% } %> <% } else { %>
+            <p>No watches available</p>
             <% } %>
           </ul>
         </div>

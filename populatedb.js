@@ -106,56 +106,56 @@ async function createWatches() {
       "Elegant Explorer",
       "A sleek dress watch with a stainless steel case and black leather strap. Perfect for formal occasions.",
       250,
-      [styles[0]],
-      brands[0]
+      styles[0],
+      [brands[0]]
     ),
     watchCreate(
       1,
       "Rugged Ranger",
       "A durable field watch with a tough canvas strap and luminescent hands. Built to withstand the elements.",
       150,
-      [styles[1]],
-      brands[1]
+      styles[1],
+      [brands[1]]
     ),
     watchCreate(
       2,
       "Skybound Soarer",
       "An aviator watch with a large, easy-to-read dial and a brown leather strap. Designed for pilots and aviation enthusiasts.",
       300,
-      [styles[2]],
-      brands[2]
+      styles[2],
+      [brands[2]]
     ),
     watchCreate(
       3,
       "Deep Diver",
       "A dive watch with a water-resistant case and a rotating bezel for tracking dive times. Ideal for underwater adventures.",
       350,
-      [styles[3]],
-      brands[0]
+      styles[3],
+      [brands[0]]
     ),
     watchCreate(
       4,
       "Rapid Racer",
       "A racing watch with a chronograph function and a tachymeter scale for measuring speed. Perfect for motorsports enthusiasts.",
       400,
-      [styles[4]],
-      brands[1]
+      styles[4],
+      [brands[1]]
     ),
     watchCreate(
       5,
       "Timeless Classic",
       "A vintage-inspired dress watch with a gold-plated case and a brown leather strap. A timeless addition to any outfit. ",
       200,
-      [styles[0]],
-      brands[2]
+      styles[0],
+      [brands[2]]
     ),
     watchCreate(
       6,
       "Modern Minimalist",
       "A contemporary dress watch with a minimalist design and a stainless steel mesh strap. Simple yet sophisticated.",
       180,
-      [styles[0]],
-      brands[0]
+      styles[0],
+      [brands[0]]
     ),
   ]);
 }

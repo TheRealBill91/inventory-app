@@ -23,12 +23,15 @@
         <div class="col-sm-2"><%- include('../navbar') %></div>
         <div class="col-sm-10">
           <h1><%= title %></h1>
-          <ul >
-            <% for (let style of all_styles) { %>
+          <ul>
+            <% if (all_styles.length > 0) { %> <% for (let style of all_styles)
+            { %>
             <li>
               <a href="<%= style.url %>"> <%= style.name %> </a>
             </li>
 
+            <% } %> <% } else { %>
+            <p>No styles available</p>
             <% } %>
           </ul>
         </div>

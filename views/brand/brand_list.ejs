@@ -23,12 +23,15 @@
         <div class="col-sm-2"><%- include('../navbar') %></div>
         <div class="col-sm-10">
           <h1><%= title %></h1>
-          <ul >
-            <% for (let brand of all_brands) { %>
+          <ul>
+            <% if (all_brands.length > 0) { %> <% for (let brand of all_brands)
+            { %>
             <li>
               <a href="<%= brand.url %>"> <%= brand.name %> </a>
             </li>
 
+            <% } %> <% } else { %>
+            <p>No brands available</p>
             <% } %>
           </ul>
         </div>
