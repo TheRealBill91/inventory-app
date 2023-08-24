@@ -54,11 +54,39 @@ exports.brand_update_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.brand_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting brand get request");
+  const [brand, allBrandWatches] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Watch.find({ brand: req.params.id }, "name description").exec(),
+  ]);
+
+  if (brand === null) {
+    res.redirect("/catalog/brands");
+  }
+
+  res.render("brand/brand_delete", {
+    title: brand.name,
+    brand: brand,
+    brand_watches: allBrandWatches,
+  });
 });
 
 exports.brand_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("");
+  const [brand, allBrandWatches] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Watch.find({ brand: req.params.id }, "name description").exec(),
+  ]);
+
+  if (allBrandWatches.length > 0) {
+    res.render("brand/brand_delete", {
+      title: brand.name,
+      brand: brand,
+      brand_watches: allBrandWatches,
+    });
+    return;
+  } else {
+    await Brand.findByIdAndRemove(req.body.brandid);
+    res.redirect("/catalog/brands");
+  }
 });
 
 exports.brand_details = asyncHandler(async (req, res, next) => {
@@ -76,7 +104,7 @@ exports.brand_details = asyncHandler(async (req, res, next) => {
 
   res.render("brand/brand_detail", {
     title: brand_details.name,
-    brand_details: brand_details,
+    brand: brand_details,
     brand_watches: allWatchesByBrand,
   });
   res.send("page for displaying watch brand details");

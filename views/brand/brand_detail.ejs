@@ -27,17 +27,28 @@
           <div style="margin-left: 20px; margin-top: 20px">
             <% if ( brand_watches.length > 0) { %>
             <h4 style="margin-bottom: 12px">Stock:</h4>
-            <% for (let brand_watch of brand_watches) { %>
+            <% brand_watches.forEach((brand_watch, index) => { %>
+
             <dl>
               <dt style="display: flex; gap: 10px; align-items: baseline">
                 <a href="<%= brand_watch.url  %>"><%= brand_watch.name %></a>
               </dt>
               <dd><%= brand_watch.description %></dd>
             </dl>
+            <%if (index < brand_watches.length - 1 ) { %>
             <hr />
-            <% } %> <% } else { %>
+            <% } %> <% }); %> <% } else { %>
             <p>No watches with this brand...</p>
             <% } %>
+          </div>
+          <hr />
+          <div style="display: flex; gap: 10px">
+            <p>
+              <a href="<%= brand.url+'/delete'  %>">Delete Brand</a>
+            </p>
+            <p>
+              <a href="<%= brand.url+'/update'  %>"> Update Brand </a>
+            </p>
           </div>
         </div>
       </div>

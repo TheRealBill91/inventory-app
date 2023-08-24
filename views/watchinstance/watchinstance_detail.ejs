@@ -39,7 +39,18 @@
           <% } else { %>
           <p>Available for purchase</p>
           <% } %>
+          <hr>
+          <div style="display: flex; gap: 10px">
+            <p>
+              <a href="<%= watchinstance_details.url+'/delete'  %>">Delete Style</a>
+            </p>
+            <p>
+              <a href="<%= watchinstance_details.url+'/update'  %>"> Update Style </a>
+            </p>
+          </div>
         </div>
+        
+       
       </div>
     </div>
   </body>

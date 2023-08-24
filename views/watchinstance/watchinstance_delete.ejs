@@ -17,24 +17,38 @@
       crossorigin="anonymous"
     ></script>
   </head>
+
   <body>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-2"><%- include('../navbar') %></div>
-        <div class="col-sm-10">
-          <h1><%= title %></h1>
-          <ul>
-            <% if (all_watches.length > 0) { %> <% for (let watch of
-            all_watches) { %>
-            <li>
-              <a href="<%= watch.url %>"> <%= watch.name %> </a>
-              ($<%= watch.price %>)
-            </li>
 
-            <% } %> <% } else { %>
-            <p>No watches available</p>
-            <% } %>
-          </ul>
+        <div class="col-sm-10" style="margin-top: 20px">
+          <h1><%= title %></h1>
+
+          <p>
+            <strong>Do you really want to delete this watch entry?</strong>
+          </p>
+          <p>Title: <%= watch_instance.watch.name %></p>
+          <p>Status: <%= watch_instance.serial_number %></p>
+          <% if (watch_instance.purchase_date_formatted) { %>
+          <p>Purchase Date: <%= watch_instance.purchase_date_formatted %></p>
+          <% } %>
+
+          <form method="POST" action="">
+            <div class="form-group">
+              <input
+                id="watchinstanceid"
+                class="form-control"
+                type="hidden"
+                name="watchinstanceid"
+                required="true"
+                value="<%= watch_instance._id  %>"
+              />
+            </div>
+            <button class="btn btn-primary" type="submit">Delete</button>
+          </form>
+       
         </div>
       </div>
     </div>

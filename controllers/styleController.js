@@ -52,11 +52,39 @@ exports.style_update_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.style_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting watch style");
+  const [style, allStyleWatches] = await Promise.all([
+    Style.findById(req.params.id).exec(),
+    Watch.find({ style: req.params.id }, "name description").exec(),
+  ]);
+
+  if (style === null) {
+    res.redirect("/catalog/styles");
+  }
+
+  res.render("style/style_delete", {
+    title: style.name,
+    style: style,
+    style_watches: allStyleWatches,
+  });
 });
 
 exports.style_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("");
+  const [style, allStyleWatches] = await Promise.all([
+    Style.findById(req.params.id).exec(),
+    Watch.find({ style: req.params.id }, "name description").exec(),
+  ]);
+
+  if (allStyleWatches.length > 0) {
+    res.render("brand/brand_delete", {
+      title: style.name,
+      style: style,
+      style_watches: allStyleWatches,
+    });
+    return;
+  } else {
+    await Style.findByIdAndRemove(req.body.styleid);
+    res.redirect("/catalog/styles");
+  }
 });
 
 exports.style_details = asyncHandler(async (req, res, next) => {
@@ -74,7 +102,7 @@ exports.style_details = asyncHandler(async (req, res, next) => {
 
   res.render("style/style_detail", {
     title: style_details.name,
-    style_details: style_details,
+    style: style_details,
     style_watches: allWatchesByStyle,
   });
 });

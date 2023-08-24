@@ -75,7 +75,7 @@ exports.watchinstance_create_post = [
 ];
 
 exports.watchinstance_update_get = asyncHandler(async (req, res, next) => {
-  res.send("page for updating watch instance");
+ 
 });
 
 exports.watchinstance_update_post = asyncHandler(async (req, res, next) => {
@@ -83,11 +83,23 @@ exports.watchinstance_update_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.watchinstance_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting watch instance");
+  const watchInstance = await WatchInstance.findById(req.params.id)
+    .populate("watch")
+    .exec();
+
+  if (watchInstance === null) {
+    res.redirect("/catalog/watchInstances");
+  }
+
+  res.render("watchinstance/watchinstance_delete", {
+    title: "Delete watch entry",
+    watch_instance: watchInstance,
+  });
 });
 
 exports.watchinstance_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting watch instance");
+  await WatchInstance.findByIdAndDelete(req.body.watchinstanceid).exec();
+  res.redirect("/catalog/watchinstances");
 });
 
 exports.watchinstance_details = asyncHandler(async (req, res, next) => {

@@ -119,19 +119,129 @@ exports.watch_create_post = [
 ];
 
 exports.watch_update_get = asyncHandler(async (req, res, next) => {
-  res.send("page for updating watches");
+  const [watch, allStyles, allBrands] = await Promise.all([
+    Watch.findById(req.params.id).exec(),
+    Style.find().exec(),
+    Brand.find().exec(),
+  ]);
+
+  if (watch === null) {
+    const err = new Error("No watch found");
+    err.status = 404;
+    return next(err);
+  }
+
+  // Mark our selected brands as checked
+  for (const brand of allBrands) {
+    for (const watch_b of watch.brand) {
+      if (brand._id.toString() === watch_b._id.toString()) {
+        brand.checked = "true";
+      }
+    }
+  }
+
+  res.render("watch/watch_form", {
+    title: "Update watch",
+    styles: allStyles,
+    brands: allBrands,
+    selected_style: watch.style._id,
+    watch: watch,
+  });
 });
 
-exports.watch_update_post = asyncHandler(async (req, res, next) => {
-  res.send("page for updating watches");
-});
+exports.watch_update_post = [
+  // Convert the brand to an array.
+  (req, res, next) => {
+    if (!(req.body.brand instanceof Array)) {
+      if (typeof req.body.brand === "undefined") req.body.brand = [];
+      else req.body.brand = new Array(req.body.brand);
+    }
+    next();
+  },
+
+  body("name", "Name must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price", "Price must not be empty")
+    .trim()
+    .isLength({ min: 1 })
+    .isCurrency()
+    .escape(),
+  body("style", "You must pick a style").trim().isLength({ min: 1 }).escape(),
+  body("brand").isArray({ min: 1 }).withMessage("Must select a brand").escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const [allBrands, allStyles] = await Promise.all([
+      Brand.find().exec(),
+      Style.find().exec(),
+    ]);
+
+    const watch = new Watch({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      style: req.body.style,
+      brand: req.body.brand,
+      id: req.params.id,
+    });
+
+    if (!errors.isEmpty) {
+      res.render("watch/watch_form", {
+        title: "Update watch",
+        brands: allBrands,
+        styles: allStyles,
+        selected_style: watch.style._id,
+        errors: errors.array(),
+      });
+    } else {
+      const updatedWatch = await Watch.findByIdAndUpdate(
+        req.params.id,
+        watch,
+        {}
+      );
+      res.redirect(updatedWatch.url);
+    }
+  }),
+];
 
 exports.watch_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting watches");
+  const [watch, associatedWatchInstances] = await Promise.all([
+    Watch.findById(req.params.id).exec(),
+    WatchInstance.find({ watch: req.params.id }).populate("watch").exec(),
+  ]);
+
+  if (watch === null) {
+    res.redirect("/catalog/watches");
+  }
+
+  res.render("watch/watch_delete", {
+    title: watch.name,
+    watch: watch,
+    watch_instances: associatedWatchInstances,
+  });
 });
 
 exports.watch_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("page for deleting watches");
+  const [watch, associatedWatchInstances] = await Promise.all([
+    Watch.findById(req.params.id).exec(),
+    WatchInstance.find({ watch: req.params.id }).populate("watch").exec(),
+  ]);
+
+  if (associatedWatchInstances.length > 0) {
+    res.render("watch/watch_delete", {
+      title: watch.name,
+      watch: watch,
+      watch_instances: associatedWatchInstances,
+    });
+    return;
+  } else {
+    await Watch.findByIdAndRemove(req.body.watchid);
+    res.redirect("/catalog/watches");
+  }
 });
 
 exports.watch_details = asyncHandler(async (req, res, next) => {
@@ -157,8 +267,3 @@ exports.watch_details = asyncHandler(async (req, res, next) => {
     watch_instances: watch_instances,
   });
 });
-
-// Will need this at some point for one of the routes
-/* if (Array.isArray(watchDetails.style)) {
-  watchDetails.style = [];
-} */
