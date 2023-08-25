@@ -75,12 +75,65 @@ exports.watchinstance_create_post = [
 ];
 
 exports.watchinstance_update_get = asyncHandler(async (req, res, next) => {
- 
+  const [watchInstance, allWatches] = await Promise.all([
+    WatchInstance.findById(req.params.id).exec(),
+    Watch.find({}).exec(),
+  ]);
+
+  if (watchInstance === null) {
+    const error = new Error("Watch instance not found");
+    error.status = 404;
+    return next(error);
+  }
+
+  res.render("watchinstance/watchinstance_form", {
+    title: "Update watch entry",
+    watch_list: allWatches,
+    selected_watch: watchInstance.watch._id,
+    watchinstance: watchInstance,
+  });
 });
 
-exports.watchinstance_update_post = asyncHandler(async (req, res, next) => {
-  res.send("");
-});
+exports.watchinstance_update_post = [
+  body("watch", "Must include a watch name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("serial_number", "Must include a serial number")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const allWatches = await Watch.find({}).exec();
+
+    const watchinstance = new WatchInstance({
+      watch: req.body.watch,
+      serial_number: req.body.serial_number,
+      purchase_date: req.body.purchase_date,
+      id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("watchinstance/watchinstance_form", {
+        title: "Update watch entry",
+        watch_list: allWatches,
+        watchinstance: watchinstance,
+        selected_watch: watchinstance.watch._id,
+        errors: errors.array(),
+      });
+    } else {
+      const updatedWatchInstance = await WatchInstance.findByIdAndUpdate(
+        req.params.id,
+        watchinstance,
+        {}
+      );
+      res.redirect(updatedWatchInstance.url);
+    }
+  }),
+];
 
 exports.watchinstance_delete_get = asyncHandler(async (req, res, next) => {
   const watchInstance = await WatchInstance.findById(req.params.id)

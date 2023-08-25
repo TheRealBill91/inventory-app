@@ -20,7 +20,7 @@ exports.brand_create_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.brand_create_post = [
-  body("name", "You must include a brand name")
+  body("brandid", "You must include a brand name")
     .trim()
     .isLength({ min: 1 })
     .escape(),
@@ -46,12 +46,51 @@ exports.brand_create_post = [
 ];
 
 exports.brand_update_get = asyncHandler(async (req, res, next) => {
-  res.send("page for updating brand get request");
+  const brand = await Brand.findById(req.params.id).exec();
+
+  if (brand === null) {
+    const err = new Error("brand not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("brand/brand_form", {
+    title: "Update brand",
+    brand: brand,
+  });
 });
 
-exports.brand_update_post = asyncHandler(async (req, res, next) => {
-  res.send("");
-});
+exports.brand_update_post = [
+  body("brandid", "You must enter a brand name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const brand = new Brand({
+      name: req.body.brandid,
+      id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("brand/brand_form", {
+        title: "Update brand",
+        brand: brand,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const updatedBrand = await Brand.findByIdAndUpdate(
+        req.params.id,
+        brand,
+        {}
+      );
+      res.redirect(updatedBrand.url);
+    }
+  }),
+];
 
 exports.brand_delete_get = asyncHandler(async (req, res, next) => {
   const [brand, allBrandWatches] = await Promise.all([
@@ -107,5 +146,4 @@ exports.brand_details = asyncHandler(async (req, res, next) => {
     brand: brand_details,
     brand_watches: allWatchesByBrand,
   });
-  res.send("page for displaying watch brand details");
 });

@@ -18,7 +18,7 @@ exports.style_create_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.style_create_post = [
-  body("name", "You must include a style name")
+  body("styleid", "You must include a style name")
     .trim()
     .isLength({ min: 1 })
     .escape(),
@@ -27,7 +27,7 @@ exports.style_create_post = [
     const errors = validationResult(req);
 
     const style = new Style({
-      name: req.body.name,
+      name: req.body.styleid,
     });
 
     if (!errors.isEmpty()) {
@@ -44,12 +44,50 @@ exports.style_create_post = [
 ];
 
 exports.style_update_get = asyncHandler(async (req, res, next) => {
-  res.send("page for updating watch style");
+  const style = await Style.findById(req.params.id).exec();
+
+  if (style === null) {
+    const error = new Error("Style not found");
+    error.status = 404;
+    return next(err);
+  }
+
+  res.render("style/style_form", {
+    title: "Update style",
+    style: style,
+  });
 });
 
-exports.style_update_post = asyncHandler(async (req, res, next) => {
-  res.send("");
-});
+exports.style_update_post = [
+  body("styleid", "You must include a style name")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const style = new Style({
+      name: req.body.styleid,
+      id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render("style/style_form", {
+        title: "Update style",
+        style: style,
+        errors: errors.array(),
+      });
+    } else {
+      const updatedStyle = await Style.findByIdAndUpdate(
+        req.params.id,
+        style,
+        {}
+      ).exec();
+      res.redirect(updatedStyle.url);
+    }
+  }),
+];
 
 exports.style_delete_get = asyncHandler(async (req, res, next) => {
   const [style, allStyleWatches] = await Promise.all([

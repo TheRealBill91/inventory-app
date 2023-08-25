@@ -29,13 +29,13 @@
             <div class="form-group">
               <label for="name"> Style: </label>
               <input
-                id="name"
-                name="name"
+                id="styleid"
+                name="styleid"
                 class="form-control"
                 type="text"
-                name="form-control"
                 placeholder="Aviator, Dress, etc"
                 value="<%= (typeof style === 'undefined') ? '' : style.name  %>"
+                required
               />
             </div>
             <button

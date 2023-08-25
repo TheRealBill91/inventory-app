@@ -29,14 +29,13 @@
             <div class="form-group">
               <label for="name"> Brand: </label>
               <input
-                id="name"
-                name="name"
+                id="brandid"
+                name="brandid"
                 class="form-control"
                 type="text"
-                name="form-control"
                 placeholder="Timeless treasures, ChronoCraft, etc"
                 value="<%= (typeof brand === 'undefined') ? '' : brand.name  %>"
-               
+                required
               />
             </div>
             <button
