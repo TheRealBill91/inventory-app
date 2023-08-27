@@ -43,6 +43,8 @@ exports.watch_create_get = asyncHandler(async (req, res, next) => {
     Brand.find().exec(),
   ]);
 
+  console.log(allBrands);
+
   res.render("watch/watch_form", {
     title: "Create watch",
     styles: allStyles,

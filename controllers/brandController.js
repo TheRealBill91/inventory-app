@@ -29,7 +29,7 @@ exports.brand_create_post = [
     const errors = validationResult(req);
 
     const brand = new Brand({
-      name: req.body.name,
+      name: req.body.brandid,
     });
 
     if (!errors.isEmpty()) {
